@@ -102,8 +102,8 @@
     "repo": "Metba09/claude-memory (privé)",
     "path": "livrables/motion-tools-bundle/",
     "tarball": "motion-tools-bundle-source.tar.gz",
-    "tarball_sha256": "3ae476f5bc64bc276328189adf9168433daab5e3194ec431c734b26eb0707a29",
+    "tarball_sha256": "53f5df88bb468706151d3dee51c34b82502ccac81acd6cf2000c32242cdfa16b",
     "archive_prefix": "motion-tools-and-skills/",
-    "source_commit": "43896e69dc411d2de690b6b5e6813ad0a8f8cc89"
+    "source_commit": "92e48c972194bac6a667441b764f9370cbda8e50"
   }
 }
