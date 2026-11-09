@@ -1,0 +1,5 @@
+# Niveaux Python NON vendorisés (inutilisables ou trop lourds dans le sandbox de session) — voir CLAUDE.md « Session Chat ».
+#
+# voice    : kokoro-onnx (modèle ~300 Mo à télécharger), faster-whisper (modèle HF), edge-tts (service Microsoft en ligne)
+# vision   : opencv-python 5 (besoin de libGL, ~60 Mo), rembg (modèle u2net téléchargé), scikit-image
+# analysis : tools/song-analysis -> torch, torchaudio, demucs, audio-separator, onnxruntime, mlx-whisper (macOS seulement)

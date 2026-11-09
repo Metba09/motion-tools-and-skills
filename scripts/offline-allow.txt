@@ -1,0 +1,8 @@
+# Exceptions à scripts/offline-guard.mjs : « <regex de chemin>  # raison ». Une ligne = un fichier ou un motif.
+^scripts/vendor\.sh$                               # outil du MAINTENEUR : seul script qui doit joindre npm/PyPI (régénère vendor/)
+^scripts/fonts\.mjs$                               # idem : récupère @fontsource lors du vendoring
+^scripts/fetch-bundle\.sh$                         # récupère le bundle depuis GitHub (hors session hors-ligne)
+^scripts/publish-bundle\.sh$                       # publie le bundle sur GitHub
+^scripts/publish-vendor\.sh$                       # publie vendor/ sur la branche orpheline GitHub
+^skills/motion-designer/scripts/doctor\.sh$        # sonde le serveur ACE-Step LOCAL (URL configurable), pas Internet
+^skills/motion-designer/scripts/music_gen\.py$     # client du serveur ACE-Step LOCAL (URL configurable)

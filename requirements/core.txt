@@ -1,0 +1,7 @@
+# Niveau core (vendorisé) : synthèse sonore, mixage, planches contact, images.
+# Origine : tools/lemo-core/requirements.txt + skills/motion-graphics-music-video/scripts/requirements.txt
+numpy>=2.0,<3
+scipy
+soundfile
+soxr
+pillow>=11,<13

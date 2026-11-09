@@ -1,0 +1,109 @@
+{
+  "schema": 1,
+  "note": "Le dépôt (cette branche) est la source de vérité ; le livrable claude-memory n'est qu'un miroir de la source. Ce fichier est committé APRÈS le tarball (un fichier ne peut pas contenir le hash d'une archive qui le contient) : le tarball est `git archive` de source_commit, antérieur à ce pointeur.",
+  "upstream_base": "2fae287134109449676d9afbfd38318985d75121",
+  "branch": "offline-bundle",
+  "repo": "Metba09/motion-tools-and-skills",
+  "python": {
+    "wheel_tags": [
+      "cp312",
+      "cp313"
+    ],
+    "tested_with": "3.13.18",
+    "version_file": null
+  },
+  "wheelhouse": {
+    "source": "PyPI (wheels) et registre npm (cache _cacache)",
+    "verified_by": "sha256 : vendor/SHA256SUMS (scripts/doctor.sh --verify) ; intégrité npm : champs integrity des package-lock.json",
+    "stored_in_git": true,
+    "stored_in_git_note": "Écart volontaire au modèle « wheels hors de Git » : demandé par le propriétaire (tout le package vendorisé dans le dépôt). Octets exacts garantis par .gitattributes (vendor/** -text). Licences à connaître : pedalboard (GPL), soxr (LGPL-2.1+) ; extras Remotion : licence Company requise pour un usage organisationnel (voir skills/video-shotcraft). Aucune wheel NVIDIA ni propriétaire repérée dans les METADATA des wheels.",
+    "approx_size_bytes": 715181431,
+    "dirs_bytes": {
+      "npm-cache": 125220320,
+      "npm-cache-extras": 170547008,
+      "npm-cache-browser": 72565605,
+      "wheels": 121752803,
+      "wheels-audio": 225095695
+    },
+    "install_command": "make setup (hors-ligne, depuis vendor/)",
+    "refresh_command": "make vendor (réseau npm/PyPI, mainteneur) : rend ce pointeur périmé, make lint échoue jusqu'à mise à jour"
+  },
+  "counts": {
+    "python_wheels_vendored": {
+      "core": {
+        "cp312": 8,
+        "cp313": 8
+      },
+      "audio": {
+        "cp312": 33,
+        "cp313": 35
+      }
+    },
+    "npm_projects_by_tier": {
+      "core": [
+        "skills/kinetic-reel/template",
+        "skills/opus-visual-motion-engine/scripts",
+        "skills/motion-graphics-music-video/scripts",
+        "skills/painted-animation/template",
+        "starters/dioramas",
+        "starters/papermotion",
+        "starters/mg-styles-15",
+        "starters/pdoom-video-engine",
+        "tools/lemo-core"
+      ],
+      "extras": [
+        "skills/video-shotcraft/template",
+        "starters/tidewater-webgpu-fx"
+      ],
+      "browser": [
+        "tools/chromium-bundled"
+      ]
+    },
+    "npm_packages_per_lockfile": {
+      "skills/kinetic-reel/template": 26,
+      "skills/motion-graphics-music-video/scripts": 43,
+      "skills/opus-visual-motion-engine/scripts": 2,
+      "skills/painted-animation/template": 45,
+      "skills/video-shotcraft/template": 230,
+      "starters/dioramas": 256,
+      "starters/mg-styles-15": 68,
+      "starters/papermotion": 84,
+      "starters/pdoom-video-engine": 77,
+      "starters/tidewater-webgpu-fx": 44,
+      "tools/chromium-bundled": 19,
+      "tools/lemo-core": 2
+    },
+    "optional_not_vendored": [
+      "voice",
+      "vision",
+      "analysis"
+    ],
+    "optional_not_vendored_note": "niveaux Python voice, vision, analysis : NON vendorisés (voir requirements/NOT-VENDORED.txt)"
+  },
+  "lockfiles_sha256": {
+    "requirements/audio.txt": "6117c8bfa454d3a9a879afd588e101c5111f1ed298e771921bbe92814182fd19",
+    "requirements/core.txt": "e229b0b20246c05bc4fd439351933d62f6ef95125a3024808c970046583d911c",
+    "skills/kinetic-reel/template/package-lock.json": "1232b1822e9fbd7bc9efdaa5314742052e5d50b287efcf598dae82fbf5f88abe",
+    "skills/motion-graphics-music-video/scripts/package-lock.json": "ddca2982360c75f6305cb8004f727856f8b462b9c258f6c0eac693708b9bde6a",
+    "skills/opus-visual-motion-engine/scripts/package-lock.json": "8735f050fa6947a775fb7dde580f9b39b732596f65daeeee99b3d2551c5578f1",
+    "skills/painted-animation/template/package-lock.json": "3f1d598601f29d7414153f16a82e430c59c75585244aa2df47b175a14580f5c7",
+    "skills/video-shotcraft/template/package-lock.json": "f3b5052bc405cd252d32db5ae0814bb34b905c8eafb3f6aab8354df2fb0b97f3",
+    "starters/dioramas/package-lock.json": "01be94594aafd74a55a86327d8897e5c6a63504f628713abf5be966fe60b3868",
+    "starters/mg-styles-15/package-lock.json": "cfaaa2f8a9df1aa98ce65e23924d66110b10ce0b9f347fe46bc33a1055ed841b",
+    "starters/papermotion/package-lock.json": "b6e78b679516c7ca977dfc848ff2bf09444a748a22302eead1d1eb15c3ab7e6c",
+    "starters/pdoom-video-engine/package-lock.json": "c685ed4ce0dbc4b46af2e8b5b4577c06d42ba2a3802cc264a3a65bcc906f66b4",
+    "starters/tidewater-webgpu-fx/package-lock.json": "a3d207b3a5a1c476eaf9f1ac9969e5a3b330447afba87a287aa9f65e867fd607",
+    "tools/chromium-bundled/package-lock.json": "136a69a198cf9a665cd45282411800d78e09c3d6ede83597704b9ec3297e8a7c",
+    "tools/lemo-core/package-lock.json": "36ecdf55fa6a24e411cb905eb38e4b685819e4166c96dd7ca9084a3cf927e19c",
+    "vendor/SHA256SUMS": "f2fb0db15a2db8ffc155d3873b1dab945fa01bfb6c0fe05d35d00d748bac83b7"
+  },
+  "lockfile_set_sha256": "cf8a561f13faeacfba8a1a1f9fe78dd45932542b7c5901a82e3f237850424dc2",
+  "bundle": {
+    "repo": "Metba09/claude-memory (privé)",
+    "path": "livrables/motion-tools-bundle/",
+    "tarball": "motion-tools-bundle-source.tar.gz",
+    "tarball_sha256": "3ae476f5bc64bc276328189adf9168433daab5e3194ec431c734b26eb0707a29",
+    "archive_prefix": "motion-tools-and-skills/",
+    "source_commit": "43896e69dc411d2de690b6b5e6813ad0a8f8cc89"
+  }
+}

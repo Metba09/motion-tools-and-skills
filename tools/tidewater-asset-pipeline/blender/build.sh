@@ -3,6 +3,8 @@
 # Needs: Blender 4.2+ (tested 5.2), ImageMagick, curl, gh (GitHub CLI) for listing texture files.
 #   tools/characters/build.sh [workdir]
 set -e
+# --- Bundle hors-ligne : ce script télécharge ou installe depuis Internet. Refusé tant que MOTION_OFFLINE != 0.
+[ "${MOTION_OFFLINE:-1}" = 0 ] || { echo "✗ $(basename "$0") : accès réseau requis ; le sandbox est hors-ligne (MOTION_OFFLINE=1). Voir CLAUDE.md « Session Chat »." >&2; exit 3; }
 HERE=${0:A:h}; ROOT=${HERE:h:h}; WORK=${1:-/tmp/rocketbox}
 BLENDER=${BLENDER:-/Applications/Blender.app/Contents/MacOS/Blender}
 mkdir -p $WORK && cd $WORK

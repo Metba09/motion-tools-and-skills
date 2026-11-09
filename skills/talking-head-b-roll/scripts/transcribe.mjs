@@ -8,8 +8,13 @@
 // and prints the lines with their times, which is what you plan from. `lines` are split at sentence ends;
 // split further at clause ends yourself, using the word times.
 //
-// Engines, first one available wins (or force one with --engine elevenlabs|whisper):
+// Engines, first one available wins (or force one with --engine elevenlabs|whisper|script):
 //   elevenlabs  ELEVENLABS_API_KEY  (Scribe v2: the most accurate word times; spells numbers out as words)
+//               ONLINE ONLY: refused while MOTION_OFFLINE=1 (the default in the offline bundle).
+//   script      OFFLINE, no model: you give the text (--script "..." or --script-file f.txt, or a <video>.txt next
+//               to the video) and the word times are estimated from the audio: speech/silence is detected with
+//               ffmpeg, then the words are spread over the speech in proportion to their length. Good enough to plan
+//               b-roll; use whisper or elevenlabs when exact word times matter.
 //   whisper     local whisper.cpp, no key: `brew install whisper-cpp` (or build it), and a ggml model
 //               (WHISPER_MODEL=/path/to/ggml-base.en.bin, or put it in ~/.cache/whisper/)
 //
@@ -54,9 +59,12 @@ function whisperModel() {
   return null;
 }
 const whisperBin = ['whisper-cli', 'whisper-cpp'].find(has);
+const OFFLINE = (process.env.MOTION_OFFLINE ?? '1') !== '0';
+const scriptFile = opt('--script-file') || [input.replace(/\.[^./\\]+$/, '') + '.txt'].find(existsSync);
 const available = {
-  elevenlabs: !!process.env.ELEVENLABS_API_KEY,
+  elevenlabs: !OFFLINE && !!process.env.ELEVENLABS_API_KEY,
   whisper: whisperBin && whisperModel(),
+  script: !!(opt('--script') || scriptFile),
 };
 const engine = opt('--engine') || Object.keys(available).find(k => available[k]);
 if (!engine || !available[engine]) {
@@ -66,7 +74,8 @@ if (!engine || !available[engine]) {
     '                  mkdir -p ~/.cache/whisper && curl -L -o ~/.cache/whisper/ggml-base.en.bin \\',
     '                    https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin',
     '                  (English; for other languages use ggml-small.bin or larger)',
-    '  ElevenLabs:     export ELEVENLABS_API_KEY=...',
+    '  ElevenLabs:     export ELEVENLABS_API_KEY=...  (and MOTION_OFFLINE=0: it needs the network)',
+    '  offline:        give the text: --script "what is said" (or --script-file f.txt, or a <video>.txt beside the video)',
   ].join('\n'));
   rmSync(tmp, { recursive: true }); process.exit(1);
 }
@@ -127,6 +136,21 @@ if (engine === 'whisper') {
   };
   words = words.map(w => ({ text: w.text, start: warp(w.start, false), end: warp(w.end, true) }));
   for (const w of words) if (w.end < w.start) w.end = w.start;
+} else if (engine === 'script') {
+  // Offline: the text is known, only the times are estimated (see the header).
+  const toks = (opt('--script') || readFileSync(scriptFile, 'utf8')).trim().split(/\s+/).filter(Boolean);
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', input, '-vn', '-ar', '16000', '-ac', '1', wav]);
+  const sl = spawnSync('ffmpeg', ['-v', 'info', '-i', wav, '-af', 'silencedetect=noise=-35dB:d=0.18', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
+  const quiet = [...sl.matchAll(/silence_start: ([\d.]+)[\s\S]*?silence_end: ([\d.]+)/g)].map(m => [Number(m[1]), Number(m[2])]);
+  let speech = [], from = 0;                                   // speech = what is left once the silences are removed
+  for (const [a, b] of quiet) { if (a > from + .05) speech.push([from, a]); from = b; }
+  if (duration > from + .05) speech.push([from, duration]);
+  if (!speech.length) speech = [[0, duration]];
+  const weight = toks.map(w => w.replace(/[^\p{L}\p{N}]/gu, '').length + 1 + (/[,;:.?!…]["”')\]]*$/.test(w) ? 1.5 : 0));
+  const spoken = speech.reduce((t, [a, b]) => t + (b - a), 0), wsum = weight.reduce((a, b) => a + b, 0);
+  const at = c => { for (const [a, b] of speech) { if (c <= b - a) return a + c; c -= b - a; } return speech.at(-1)[1]; };
+  let acc = 0;
+  words = toks.map((text, i) => { const st = acc; acc += weight[i] / wsum * spoken; return { text, start: at(st), end: at(acc) }; });
 } else if (engine === 'elevenlabs') {
   execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', input, '-vn', '-ac', '1', '-b:a', '96k', mp3]);
   const form = new FormData();

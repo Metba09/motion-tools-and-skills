@@ -1,4 +1,6 @@
 // node dl.mjs id:user ...  -> raw/<id>.ogg + raw/<id>.json (title, author, license, url, description)
+// --- Bundle hors-ligne : ce script appelle Internet. Refusé tant que MOTION_OFFLINE != 0.
+if ((process.env.MOTION_OFFLINE ?? '1') !== '0') { console.error(`✗ ${import.meta.url.split('/').pop()} : accès réseau requis ; sandbox hors-ligne (MOTION_OFFLINE=1). Voir CLAUDE.md « Session Chat ».`); process.exit(3); }
 import fs from 'node:fs';
 const UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 const items = process.argv.slice( 2 ).map( ( s ) => s.split( ':' ) );

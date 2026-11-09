@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# --- Bundle hors-ligne : ce script télécharge ou installe depuis Internet. Refusé tant que MOTION_OFFLINE != 0.
+[ "${MOTION_OFFLINE:-1}" = 0 ] || { echo "✗ $(basename "$0") : accès réseau requis ; le sandbox est hors-ligne (MOTION_OFFLINE=1). Voir CLAUDE.md « Session Chat »." >&2; exit 3; }
 venv="${MOTION_DESIGNER_TTS_VENV:-${MOTION_DESIGNER_HOME:-$HOME/.cache/motion-designer}/chatterbox}"
 command -v uv >/dev/null || { echo "uv is required: https://docs.astral.sh/uv/getting-started/installation/" >&2; exit 1; }
 uv venv "$venv" --python 3.11

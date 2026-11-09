@@ -1,4 +1,9 @@
 """Select a curated subset of VCSL (CC0) files and write a download list."""
+# --- Bundle hors-ligne : ce script appelle Internet. Refusé tant que MOTION_OFFLINE != 0.
+import os as _os, sys as _sys
+if _os.environ.get("MOTION_OFFLINE", "1") != "0":
+    print("✗ %s : accès réseau requis ; sandbox hors-ligne (MOTION_OFFLINE=1). Voir CLAUDE.md « Session Chat »." % _os.path.basename(__file__), file=_sys.stderr)
+    _sys.exit(3)
 import json, re, sys, urllib.parse
 tree = json.load(open(sys.argv[1]))['tree']
 blobs = [x for x in tree if x['type'] == 'blob' and x['path'].lower().endswith(('.wav', '.mp3', '.flac'))]

@@ -1,6 +1,8 @@
 #!/bin/zsh
 # textures.sh <Textures dir> <out dir> <prefix> [size]
 # colour / normal -> JPEG, specular -> ORM (R 1, G roughness = 0.92 - 0.6 * spec, B metal 0), opacity cards -> PNG with alpha
+# --- Bundle hors-ligne : ce script télécharge ou installe depuis Internet. Refusé tant que MOTION_OFFLINE != 0.
+[ "${MOTION_OFFLINE:-1}" = 0 ] || { echo "✗ $(basename "$0") : accès réseau requis ; le sandbox est hors-ligne (MOTION_OFFLINE=1). Voir CLAUDE.md « Session Chat »." >&2; exit 3; }
 src=$1; out=$2; p=$3; S=${4:-1024}
 mkdir -p $out
 for k in body head; do

@@ -66,3 +66,18 @@ comfyui/models/
 *.ckpt
 *.pt
 *.pth
+
+# ---- Bundle hors-ligne ----
+.lib/
+dist-bundle/
+vendor/**/_logs/
+# pages d'exemple générées par scripts/test.sh (anatomy)
+skills/anatomy/examples/*/*.html
+dist-release/
+
+# vendor/ lourd : branche orpheline sandbox-vendor (scripts/fetch-bundle.sh) ; seuls SHA256SUMS et MANIFEST.json sont suivis
+vendor/npm-cache/
+vendor/npm-cache-extras/
+vendor/npm-cache-browser/
+vendor/wheels/
+vendor/wheels-audio/

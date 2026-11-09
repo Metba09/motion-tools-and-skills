@@ -1,0 +1,9 @@
+{
+  "name": "chromium-bundled",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Chromium headless embarqué (npm) pour le bundle hors-ligne : sert de repli quand le sandbox n'a aucun Chrome système. WebGL via SwiftShader.",
+  "scripts": { "path": "node path.mjs" },
+  "dependencies": { "@sparticuz/chromium": "153.0.0" }
+}

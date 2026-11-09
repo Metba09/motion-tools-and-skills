@@ -18,3 +18,6 @@
 *.otf binary
 *.woff binary
 *.woff2 binary
+
+# Bundle hors-ligne : octets exacts (SHA-256 vérifiés), jamais de conversion de fins de ligne
+vendor/** -text -diff -merge

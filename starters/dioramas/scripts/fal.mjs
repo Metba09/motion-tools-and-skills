@@ -1,12 +1,24 @@
 // Shared fal client. Reads FAL_KEY from the environment or a .env file in the project root.
+//
+// Offline bundle: with MOTION_OFFLINE != 0 (the default there) or FAL_MOCK=1, NO request leaves the machine:
+// ./fal-mock.mjs answers instead, with valid but fake assets (a coloured PNG, a one-cube GLB), so the whole
+// pipeline (manifest, resume, optimize, render) can be exercised. Real generation needs MOTION_OFFLINE=0 and FAL_KEY.
 import { config } from 'dotenv';
-import { fal } from '@fal-ai/client';
 import fs from 'node:fs';
 import path from 'node:path';
+import { mockBytes } from './fal-mock.mjs';
 
 config({ quiet: true });
-if (!process.env.FAL_KEY) throw new Error('FAL_KEY missing: copy .env.example to .env and add your fal key');
-fal.config({ credentials: process.env.FAL_KEY });
+export const MOCK = process.env.FAL_MOCK === '1' || ((process.env.MOTION_OFFLINE ?? '1') !== '0' && process.env.FAL_MOCK !== '0');
+let fal;
+if (MOCK) {
+  ({ fal } = await import('./fal-mock.mjs'));
+  console.warn('[fal] MODE MOCK : aucune requête réseau, assets factices (FAL_MOCK=0 + MOTION_OFFLINE=0 + FAL_KEY pour du réel).');
+} else {
+  if (!process.env.FAL_KEY) throw new Error('FAL_KEY missing: copy .env.example to .env and add your fal key');
+  ({ fal } = await import('@fal-ai/client'));
+  fal.config({ credentials: process.env.FAL_KEY });
+}
 
 export { fal };
 
@@ -29,6 +41,7 @@ export function updateManifest(fn) {
 
 export async function download(url, dest) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });
+  if (url.startsWith('mock://')) { fs.writeFileSync(dest, mockBytes(url)); return dest; }
   for (let attempt = 0; attempt < 4; attempt++) {
     try {
       const res = await fetch(url);

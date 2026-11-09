@@ -1,3 +1,8 @@
+# --- Bundle hors-ligne : ce script appelle Internet. Refusé tant que MOTION_OFFLINE != 0.
+import os as _os, sys as _sys
+if _os.environ.get("MOTION_OFFLINE", "1") != "0":
+    print("✗ %s : accès réseau requis ; sandbox hors-ligne (MOTION_OFFLINE=1). Voir CLAUDE.md « Session Chat »." % _os.path.basename(__file__), file=_sys.stderr)
+    _sys.exit(3)
 import json, urllib.request, os, sys
 op=urllib.request.build_opener(); op.addheaders=[('User-Agent','tidewater-asset-fetch/1.0')]; urllib.request.install_opener(op)
 import pathlib

@@ -8,6 +8,29 @@
 # The library is a sparse clone of the main branch: guides, core/ tools and every STYLE.md. Big assets: tools/fetch.sh.
 # LEMO_OPUSCAR_HOME = where the library lives (default: the clone you stand in, else ~/lemo-opuscar).
 set -e
+
+# --- Bundle hors-ligne (MOTION_OFFLINE != 0, valeur par défaut) ---------------------------------------------------
+# La bibliothèque est déjà dans ce dépôt (tools/lemo-core, prompts/film-styles, docs/guides/lemo-opuscar) : on
+# l'assemble par liens symboliques dans .lib/lemo-opuscar au lieu de la cloner, et `deps` appelle ./setup.sh.
+if [ "${MOTION_OFFLINE:-1}" != 0 ]; then
+  HERE=$(cd "$(dirname "$0")" && pwd); ROOT=$(cd "$HERE/../../.." && pwd)
+  bash "$ROOT/scripts/assemble-lemo.sh" >/dev/null || { echo "✗ assemblage de la bibliothèque impossible"; exit 1; }
+  LIB="$ROOT/.lib/lemo-opuscar"
+  case "${1:-}" in
+    deps)
+      shift
+      for t in "$@"; do case $t in
+        music) bash "$ROOT/setup.sh" audio || exit 1 ;;   # numba : niveau Python « audio » du bundle
+        voice) echo "✗ niveau « voice » (kokoro-onnx, faster-whisper) absent du bundle hors-ligne : modèles à télécharger. Voir CLAUDE.md « Session Chat »."; exit 3 ;;
+        *) echo "usage: sh setup.sh deps [music]"; exit 1 ;;
+      esac; done
+      bash "$ROOT/setup.sh" core || exit 1 ;;
+    demo) echo "✗ les sources de démo ne sont pas dans le bundle hors-ligne (réseau requis : MOTION_OFFLINE=0)."; exit 3 ;;
+  esac
+  echo "LIB=$LIB"
+  exit 0
+fi
+
 REPO=${LEMO_OPUSCAR_REPO:-https://github.com/lemomo-ai/lemo-opuscar.git}
 
 # 1. Which library: $LEMO_OPUSCAR_HOME, else the clone we are standing in, else ~/lemo-opuscar
