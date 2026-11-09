@@ -1,0 +1,11 @@
+{
+  "generated": "2026-11-09T21:49:48+00:00",
+  "target": "linux-x64 glibc, Node >= 22.12, Python 3.12 ou 3.13",
+  "dirs_bytes": {
+    "npm-cache": 125220320,
+    "npm-cache-extras": 170547008,
+    "npm-cache-browser": 72565605,
+    "wheels": 121752803,
+    "wheels-audio": 225095695
+  }
+}
